@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- list view -->
+    <record id="view_sales_quotation_list" model="ir.ui.view">
+        <field name="name">sales.quotation.list</field>
+        <field name="model">sales.quotation</field>
+        <field name="arch" type="xml">
+            <list string="Sales Quotations">
+                <field name="name"></field>
+                <field name="uola_sale_quo_number" ></field>
+                <field name="uola_sale_quo_number"></field>
+            </list>
+        </field>
+    </record>
+
+    <!-- form view -->
+    <record id="view_sales_quotation_form" model="ir.ui.view">
+        <field name="name">sales.quotation.list</field>
+        <field name="model">sales.quotation</field>
+        <field name="arch" type="xml">
+            <form string="Sales Quotations">
+            <sheet>
+                <group>
+                <group string="Basic">
+                        <field name="uola_sale_quo_date"></field>
+                        <field name="uola_sale_quo_number"></field>
+                        <field name="uola_sale_quo_contact_id"></field>
+                        <field name="uola_sale_quo_brand_id"></field>
+                        <field name="partner_id"></field>
+                        <field name="user_id"></field>
+                        <field name="uola_sale_quo_location_id"></field>
+                        <field name="uola_sale_quo_remarks"></field>
+                       
+                </group>
+                </group>
+                <notebook>
+                    <page name="content" string="Content">
+                        <field name="uola_main_ids"></field>
+                    </page>
+                </notebook>
+            </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sales_quotation" model="ir.actions.act_window">
+        <field name="name">Sales Quotation</field>
+        <field name="res_model">sales.quotation</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new quotation
+            </p>
+        </field>
+    </record>
+
+</odoo>

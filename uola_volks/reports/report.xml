@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="sales_invoice_report">
+        <t t-foreach="docs" t-as="property">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout"/>
+                    <div class="page">
+                        <div class="row" style="overflow: hidden;">
+                        <div class="col-6">
+                            <tbody>
+                            <tr t-foreach="docs" t-as="line"> 
+                                <p><strong>Invoice No</strong>: <span t-field="line.name"/></p>
+                                <p><strong>Addressed to</strong>: <span t-field="line.company_id"/></p>
+                                <p><strong>Address</strong>: <span t-field="line.company_address"/></p>
+                                <p><strong>Project</strong>: <span t-field="line.partner_id"/></p>
+                                <p><strong>PO. NO</strong>: </p>
+                            </tr>
+                            </tbody>
+                        </div>
+                        <div class="col-6 text-right">
+                            <tbody>
+                            <tr t-foreach="docs" t-as="line"> 
+                                <p style="text-align: justify; line-height: 1.5;"><strong>Invoice Date</strong>: <span t-field="line.display_date"/></p>
+                                <p><strong>DO. No</strong>: </p>
+                                <p><strong>Phone</strong>: <span t-field="line.phone"/></p>
+                                <p><strong>Due Date</strong>: <span t-field="line.invoice_payment_term_id"/></p>
+                                <p><strong>Currency</strong>: <span t-field="line.currency_id"/></p>
+                            </tr>
+                            </tbody>
+                        </div>
+                    </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center;"><strong>Item Description</strong></th>
+                                    <th style="text-align: center;"><strong>Qty</strong></th>
+                                    <th style="text-align: center;"><strong>Unit Price</strong></th>
+                                    <th style="text-align: center;"><strong>Amount</strong></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="docs.inv_content_ids" t-as="line">
+                                    <tr>
+                                        <td><span t-field="line.main_unit_quotation"/></td>
+                                        <td style="text-align: right;"><span t-field="line.uola_inv_qty"/></td>
+                                        <td style="text-align: right;"><span t-field="line.uola_inv_unit_price"/></td>
+                                        <td style="text-align: right;"><span t-field="line.uola_inv_amount"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        <!-- Left Column -->
+                        <div class="col-12 text-right">
+                        <table class="table table-bordered" style="float: left; width: 50%;">
+                                <tr t-foreach="docs.inv_content_ids" t-as="o"> 
+                                    <th style="vertical-align: top;">
+
+                                    <div class="say-section">
+                                        <p><strong>Say:</strong> <span t-field="o.uola_inv_say"/></p>
+                                        <p style="float: center; text-align: center;"><strong>Sincerely</strong></p>
+                                    </div>
+                                        
+                                        <p><strong>Bank Account :</strong></p>
+                                        <p>BCA Cab Central Park</p>
+                                        <p>Rek. (US$) : 5485064939</p>
+                                        <p>Rek. ( Rp) : 5485063738</p>
+                                        <p>a/n        : PT Uola Prima Sejahtera</p>
+
+                                        <div class="note-section">
+                                            <p>Note : Please pay the full amount of this invoice</p>
+                                            <p style="float: right; text-align: center;"><strong>Direktur</strong></p>
+                                        </div>
+                                        
+                                    </th>
+                                </tr>
+                        </table>
+                        <!-- Right Column -->
+                        <div style="float: right; width: 50%; margin-bottom: 100px;">
+                        <table class="table table-bordered">
+                        <tr>
+                            <th style="text-align: left; padding-bottom: 15px; vertical-align: center;"><strong>Sub Total</strong></th>
+                            <th style="text-align: right;"><strong><span t-field="o.uola_inv_total"/></strong></th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; padding-bottom: 14px; vertical-align: middle;"><strong>Discount</strong></th>
+                            <th style="text-align: right;"><strong><span t-field="o.uola_inv_discount"/></strong></th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; padding-bottom: 14px;"><strong>Payment</strong></th>
+                            <th style="text-align: right;"><strong><span t-field="o.uola_inv_payment"/></strong></th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; padding-bottom: 14px;"><strong>Sub Tot After Disc</strong></th>
+                            <th style="text-align: right;"><strong><span t-field="o.uola_inv_freight"/></strong></th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; padding-bottom: 15px;"><strong>VAT 11%</strong></th>
+                            <th style="text-align: right;"><strong><span t-field="o.uola_inv_tax"/></strong></th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; padding-bottom: 14px;"><strong>Freight</strong></th>
+                            <th style="text-align: right;"><strong><span t-field="o.uola_inv_freight"/></strong></th>
+                        </tr>
+                        <tr>
+                            <th style="text-align: left; padding-bottom: 15px;"><strong>Total Amount</strong></th>
+                            <th style="text-align: right;"><strong><span t-field="o.uola_inv_total"/></strong></th>
+                        </tr>
+                        </table>
+                        </div>
+
+                        </div>
+                    </div>
+                </t>
+            </t>
+
+            <style>
+                .table-bordered {
+                    width: 100%;
+                    table-layout: fixed; /* Memastikan lebar kolom tetap */
+                    border-collapse: collapse;
+                }
+                .table-bordered th, .table-bordered td {
+                    border: 1px solid black;
+                    padding: 5px;
+                    word-wrap: break-word; /* Memastikan teks panjang membungkus */
+                }
+                .table-bordered td {
+                    border: 1px solid black;
+                    height: 500px; /* Sesuaikan tinggi */
+                }
+                .table-bordered th:nth-child(1), .table-bordered td:nth-child(1) {
+                    width: 30%; /* Item Description: lebih lebar */
+                }
+                .table-bordered th:nth-child(2), .table-bordered td:nth-child(2) {
+                    width: 5%; /* Qty: lebih kecil */
+                }
+                .table-bordered th:nth-child(3), .table-bordered td:nth-child(3) {
+                    width: 20%; /* Unit Price: sedang */
+                }
+                .table-bordered th:nth-child(4), .table-bordered td:nth-child(4) {
+                    width: 15%; /* Amount: lebih kecil */
+                }
+                .say-section p {
+                    margin: 0;
+                }
+                .note-section {
+                    margin-top: 20px;
+                }
+                .note-section p {
+                    margin: 0;
+                }
+            </style>
+            
+        </template>
+
+    <record id="sales_invoice" model="ir.actions.report">
+            <field name="name">Sales-Invoice</field>
+            <field name="model">uola.invoice</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">uola_volks.sales_invoice_report</field>
+            <field name="report_file">uola_volks.sales_invoice_report</field>
+            <field name="print_report_name">
+                (object.state in ('draft', 'done', 'cancel') and 'Invoice %s' % (object.name))
+            </field>
+            <field name="binding_model_id" ref="model_uola_invoice"/>
+            <field name="binding_type">report</field>
+        </record>
+
+</odoo>

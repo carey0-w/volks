@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List view -->
+    <record id="view_invoice_content_list" model="ir.ui.view">
+        <field name="name">invoice.content.list</field>
+        <field name="model">invoice.content</field>
+        <field name="arch" type="xml">
+            <list string="Invoice Content" editable="bottom">
+                <field name="main_unit_quotation"></field>
+                <field name="uola_inv_qty"></field>
+                <field name="uola_inv_unit_price"/>
+                <field name="uola_inv_amount"/>
+                <field name="uola_inv_tax"/>
+                <field name="uola_inv_total"/>
+            </list>       
+        </field>
+    </record>
+
+    <record id="action_invoice_content" model="ir.actions.act_window">
+        <field name="name">Invoice Content</field>
+        <field name="res_model">invoice.content</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new invoice content
+            </p>
+        </field>
+    </record>
+
+</odoo>

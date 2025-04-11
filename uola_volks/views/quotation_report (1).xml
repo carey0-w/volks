@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- ========================== OVERRIDE TEMPLATE LAYOUT HEADER & FOOTER ========================== -->
+        <template id="custom_web_external_layout" inherit_id="web.external_layout_standard">
+
+            <!-- Modifikasi Header -->
+            <xpath expr="//div[@t-attf-class='header o_company_#{company.id}_layout']" position="replace">
+                <div class="header" style="background-color: #f4f4f4; padding-top: 20px; padding-left: 20px; padding-right: 20px; padding-bottom: 5px;">
+                    <table class="o_has_total_table table o_main_table table-borderless" style="width: 100%; border-collapse: collapse; vertical-align: middle;">
+                        <tr>
+                            <!-- Logo -->
+                            <td style="width: 10%; text-align: left; vertical-align: middle;">
+                                <img t-if="company.logo" class="o_company_logo_small"
+                                    t-att-src="image_data_uri(company.logo)" alt="Logo"
+                                    style="max-height: 60px; max-width: 100%;"/>
+                            </td>
+
+                            <!-- Nama Perusahaan -->
+                            <td style="width: 50%; text-align: left; vertical-align: middle;">
+                                <h6 style="color: #1768bd; margin: 0;">
+                                    <span t-field="company.name"/>
+                                </h6>
+                            </td>
+
+                            <!-- Informasi Halaman -->
+                            <td style="width: 40%; text-align: right; color: #f2f2f2; vertical-align: middle;">
+                                <div class="text-muted" style="font-size: 10px;">
+                                    <t t-foreach="docs" t-as="property">
+                                        <div t-if="report_type == 'pdf' and display_name_in_footer">
+                                            <t t-out="o.name">(document name)</t>
+                                        </div>
+                                        <div t-if="report_type == 'pdf'">
+                                            Page <span class="page"/> / <span class="topage"/> of
+                                            <span t-field="property.number"/>
+                                        </div>
+                                    </t>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </xpath>
+
+            <!-- Modifikasi Footer -->
+            <xpath expr="//div[@class='o_footer_content d-flex border-top pt-2']" position="replace">
+                <div class="o_footer_content d-flex border-top pt-2" style="color: #616161; height: 30px;">
+                    <img t-att-src="'/uola_sale_quotation/static/src/img/uola_volkslift.png'"
+                        style="height: 25px; margin-right: 10px;" alt="Uola Volkslift Logo"/>
+                    <div class="flex-grow-1 text-start me-2" t-field="company.report_footer"/>
+                    <div class="text-end">
+                        <a href="https://www.uolaps.com" target="_blank" style="color: #1768bd; text-decoration: none;">
+                            www.uolaps.com
+                        </a>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+
+        <!-- ========================== TEMPLATE QUOTATION REPORT with alt unit ========================== -->
+        <template id="report_sales_quot">
+            <t t-foreach="docs" t-as="property">
+                <t t-set="company" t-value="env['res.company']._company_default_get('uola.base.sale.quotation')"/>
+                <t t-call="web.html_container">
+                    <t t-call="uola_sale_quotation.custom_web_external_layout">
+                        <div class="page">
+                            <!-- ========================== HALAMAN PERTAMA ========================== -->
+                            <h6 style="border-bottom: 0px solid lightgray; text-align: center; padding-top:1px">Surat Penawaran Harga</h6>
+                            <table class="o_has_total_table table o_main_table table-borderless">
+                                <tr>
+                                    <td style="width: 10%; font-size: 10px; padding: 3px;">Tanggal</td>
+                                    <td style="width: 90%; font-size: 11px; padding: 3px;"><span t-field="property.base_quotation_date" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">No</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.number" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Ref</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.visnumber" /></td>
+                                </tr>
+                                <br/>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Kepada Yth.</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.partner_id.name" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Alamat</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.partner_id.street" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;"></td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.partner_id.street2"/>, <span t-field="property.partner_id.city_id.name" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Telpon</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.partner_id.phone" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Email</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.partner_id.email" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Hal</td>
+                                    <td style="font-size: 11px; padding: 3px;">Penawaran Harga Elevator/Eskalator/Parking System merek <span t-field="property.brand_id"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Proyek</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.project_id.name" />, <span t-field="property.quo_city_id.name"/></td>
+                                </tr>
+                            </table>
+                            <span style="font-size: 11px;">Dengan Hormat,</span>
+                            <span style="font-size: 11px; text-align: justify; display: block;">Pertama-tama kami ucapkan banyak terima kasih atas kesempatan yang telah Bapak/Ibu berikan kepada kami. Bersama ini kami sampaikan pengadaan dan instalasi elevator/eskalator/parking system merek <strong><span t-field="property.brand_id"/></strong> sebagai berikut:</span>
+                            <br/>
+                            <!-- ========================== BAGIAN HARGA UNIT ========================== -->
+                            <span style="font-size: 12px;"><b>1. Harga Unit</b></span>
+                            <div class="oe_structure" style="border-top: 1px solid #1768bd;">
+                                <table class="o_has_total_table table o_main_table table-borderless" width="100%">
+                                    <thead style="border-top: 1px solid #1768bd; border-bottom: 1px solid #1768bd;">
+                                        <tr style="border-top: 1px solid #1768bd;">
+                                            <th rowspan="3" style="width: 3%; font-size: 12px; color: #1768bd; text-align: center; height: 15px"><strong>No.</strong></th>
+                                            <th rowspan="3" colspan="2" style="width: 32%; font-size: 12px; color: #1768bd; text-align: center; height: 15px"><strong>Keterangan</strong></th>
+                                            <th rowspan="3" style="width: 5%; font-size: 12px; color: #1768bd; text-align: center; height: 15px"><strong>Qty</strong></th>
+                                            <th colspan="2" style="width: 30%; font-size: 12px; color: #1768bd; text-align: center; height: 15px"><strong>Harga Satuan*)</strong></th>
+                                            <th colspan="2" style="width: 30%; font-size: 12px; color: #1768bd; background-color: #d5eaff; text-align: center; height: 15px"><strong>Jumlah*)</strong></th>
+                                        </tr>
+                                        <tr style="border-top: 1px solid #1768bd;">
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; text-align: center; height: 15px"><strong>IDR</strong></th>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; text-align: center; height: 15px"><strong>IDR</strong></th>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center; height: 15px"><strong>IDR</strong></th>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center; height: 15px"><strong>IDR</strong></th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; text-align: center; height: 15px"><strong>(unit)</strong></th>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; text-align: center; height: 15px"><strong>(instalasi)</strong></th>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center; height: 15px"><strong>(unit)</strong></th>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center; height: 15px"><strong>(instalasi)</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="border-top: 1px solid #d5eaff;">
+                                        <t t-set="index" t-value="1"/>
+                                        <tr t-foreach="property.quotation_main_unit_ids" t-as="line">
+                                            <td style="width: 3%; font-size: 11px; color: #1768bd; text-align: center;"><t t-esc="index"/></td>
+                                            <t t-set="index" t-value="index + 1"/>
+                                            <td style="width: 26%; font-size: 11px; color: #1768bd; text-align: left;"><span t-field="line.buql_desc" /></td>
+                                            <td style="width: 6%; font-size: 11px; color: #1768bd; text-align: center;"><span t-field="line.buql_unitcode" /></td>
+                                            <td style="width: 5%; font-size: 11px; color: #1768bd; text-align: center;"><span t-field="line.buql_qty" /></td>
+                                            <td style="width: 15%; font-size: 11px; color: #1768bd; text-align: right;"><span t-field="line.buql_unitprice" /></td>
+                                            <td style="width: 15%; font-size: 11px; color: #1768bd; text-align: right;"><span t-field="line.buql_installation_price" /></td>
+                                            <td style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><span t-field="line.buql_subtotal_unitprice" /></td>
+                                            <td style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><span t-field="line.buql_subtotal_instalprice" /></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table class="o_has_total_table table o_main_table table-borderless" style="position: relative; top: -15px;" width="100%">
+                                    <thead style="border: none;">
+                                        <tr style="border: none;">
+                                            <th colspan="6" style="border: none; width: 70%; font-size: 9px; color: #1768bd; text-align: left;"></th>
+                                            <th colspan="2" style="border: none; width: 30%; font-size: 9px; color: #1768bd; background-color: #d5eaff; text-align: center;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="border: none;">
+                                        <tr style="border: none;">
+                                            <th colspan="6" style="border: none; width: 70%; font-size: 9px; color: #1768bd; text-align: left;"><u>Alternatif:</u></th>
+                                            <th colspan="2" style="border: none; width: 30%; font-size: 9px; color: #1768bd; background-color: #d5eaff; text-align: center;"></th>
+                                        </tr>
+                                    </tbody>
+                                    <tbody style="border: none;">
+                                        <t t-set="alt_index" t-value="1"/>
+                                        <tr t-foreach="property.quotation_alt_unit_ids" t-as="alt_line">
+                                            <td style="width: 3%; font-size: 11px; color: #1768bd; text-align: center;"><t t-esc="alt_index"/></td>
+                                            <t t-set="alt_index" t-value="alt_index + 1"/>
+                                            <td style="width: 26%; font-size: 11px; color: #1768bd; text-align: left;"><span t-field="alt_line.buql_desc" /></td>
+                                            <td style="width: 6%; font-size: 11px; color: #1768bd; text-align: center;"><span t-field="alt_line.buql_unitcode" /></td>
+                                            <td style="width: 5%; font-size: 11px; color: #1768bd; text-align: center;"></td>
+                                            <td style="width: 15%; font-size: 11px; color: #1768bd; text-align: right;"><span t-field="alt_line.buql_unitprice" /></td>
+                                            <td style="width: 15%; font-size: 11px; color: #1768bd; text-align: right;"><span t-field="alt_line.buql_installation_price" /></td>
+                                            <td style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right;"></td>
+                                            <td style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right;"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <t t-if="property.quotation_optional_item_ids">
+                                    <table class="o_has_total_table table o_main_table table-borderless" style="position: relative; top: -30px;" width="100%">
+                                        <thead style="border: none;">
+                                            <tr style="border: none;">
+                                                <th colspan="6" style="border: none; width: 70%; font-size: 9px; color: #1768bd; text-align: left;"></th>
+                                                <th colspan="2" style="border: none; width: 30%; font-size: 9px; color: #1768bd; background-color: #d5eaff; text-align: center;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="border: none;">
+                                            <tr style="border: none;">
+                                                <th colspan="6" style="border: none; width: 70%; font-size: 9px; color: #1768bd; text-align: left;"><u>Optional:</u></th>
+                                                <th colspan="2" style="border: none; width: 30%; font-size: 9px; color: #1768bd; background-color: #d5eaff; text-align: center;"></th>
+                                            </tr>
+                                        </tbody>
+                                        <tbody style="border: none;">
+                                            <t t-set="oi_index" t-value="1"/>
+                                            <tr t-foreach="property.quotation_optional_item_ids" t-as="opt_item">
+                                                <td style="width: 3%; font-size: 11px; color: #1768bd; text-align: center;"><t t-esc="oi_index"/></td>
+                                                <t t-set="oi_index" t-value="oi_index + 1"/>
+                                                <td colspan="2" style="width: 32%; font-size: 11px; color: #1768bd; text-align: left;"><span t-field="opt_item.optional_item_list_id"/></td>
+                                                <td style="width: 5%; font-size: 11px; color: #1768bd; text-align: center;"><span t-field="opt_item.oi_qty"/></td>
+                                                <td style="width: 15%; font-size: 11px; color: #1768bd; text-align: right;"><span t-field="opt_item.oi_price_unit"/></td>
+                                                <td style="width: 15%; font-size: 11px; color: #1768bd; text-align: right;"><span t-field="opt_item.oi_price_inst"/></td>
+                                                <td style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right;"><span t-field="opt_item.oi_subtotal_price_unit"/></td>
+                                                <td style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right;"><span t-field="opt_item.oi_subtotal_price_inst"/></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </t>
+                                <table class="o_has_total_table table o_main_table table-borderless" style="position: relative; top: -45px;" width="100%">
+                                    <tbody style="border: none;" t-foreach="docs" t-as="property">
+                                        <tr>
+                                            <th colspan="6" style="border: none; width: 70%; font-size: 11px; color: #1768bd; text-align: right;"></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center;"> </th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center;"> </th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="6" style="border: none; width: 70%; font-size: 11px; color: #1768bd; text-align: right;"></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center;"> </th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center;"> </th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="6" style="border: none; width: 70%; font-size: 11px; color: #1768bd; text-align: right;"><strong>Sub Total:</strong></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><strong><span t-field="property.subtotal_price_unit_main"/></strong></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><strong><span t-field="property.subtotal_price_inst_main"/></strong></th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="6" style="border: none; width: 70%; font-size: 11px; color: #1768bd; text-align: right;">PPN 11%:</th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><strong><span t-field="property.uola_quo_tax_unit"/></strong></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><strong><span t-field="property.uola_quo_tax_inst"/></strong></th>
+                                        </tr>
+                                        <tr style="border-top: 1px solid #1768bd; border-bottom: 1px solid #1768bd;">
+                                            <th colspan="2" style="border: none; width: 29%; font-size: 11px; color: #1768bd; text-align: left;">Referensi kurs: <span t-field="property.lock_rate_usd" /> IDR/USD</th>
+                                            <th style="border: none; width: 6%; font-size: 10px; color: #1768bd; text-align: right;">Total: </th>
+                                            <th style="border: none; width: 5%; font-size: 11px; color: #1768bd; text-align: center;"><span t-field="property.total_qty_main"/></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; text-align: left;"> Unit</th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; text-align: right;"><strong>Total Harga:</strong></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><strong><span t-field="property.uola_quo_total_unit"/></strong></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><strong><span t-field="property.uola_quo_total_inst"/></strong></th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p style="font-size: 10px; position: relative; top: -40px;">*)<i>loco  </i><strong><span t-field="property.quo_city_id.name"/>, <span t-field="property.quo_city_id.state_id"/></strong></p>
+                            <p style="font-size: 10px; position: relative; top: -50px;"><u>Note:</u></p>
+                            <p style="text-align: right; font-size: 10px; position: relative; top: 0px;"><i>Cara Pembayaran...</i></p>
+
+                            <!-- <div t-if="report_type == 'pdf'" style="position: absolute; bottom: 10px; right: 0; width: 100%; text-align: right; padding: 5px; background: white;">
+                                <t t-if="page_number == 1">
+                                    <table class="o_has_total_table table o_main_table table-borderless" style="width: 100%; margin-bottom: 0; page-break-inside: avoid;">
+                                        <tr>
+                                            <td style="text-align: right; font-size: 10px;">
+                                                <i>Cara Pembayaran...</i>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </t>
+                            </div> -->
+
+
+                            <!-- ========================== HALAMAN KEDUA - CARA PEMBAYARAN ========================== -->
+                            <div class="oe_structure" style="page-break-before: always;">
+                                <span style="font-size: 12px;"><b>2. Cara Pembayaran</b></span>
+
+                                <table style="border-bottom: 1px solid lightgray;" class="o_has_total_table table o_main_table table-borderless">
+                                    <thead style="border-bottom: 1px solid lightgray;">
+                                        <tr>
+                                            <th style="width: 50%; font-size: 11px; color: black; text-align: left;"><strong>Unit</strong></th>
+                                            <th style="width: 50%; font-size: 11px; color: black; text-align: left;"><strong>Instalasi</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="max_length" t-value="max(len(property.quotation_payment_unit_ids), len(property.quotation_payment_inst_ids))"/>
+                                        <t t-set="unit_list" t-value="property.quotation_payment_unit_ids or []"/>
+                                        <t t-set="inst_list" t-value="property.quotation_payment_inst_ids or []"/>
+                                        <t t-foreach="range(max_length)" t-as="index">
+                                            <tr style="font-size: 11px;">
+                                                <td style="width: 50%; font-size: 11px; padding: 3px;">
+                                                    <t t-if="index &lt; len(unit_list)">
+                                                        <span t-field="unit_list[index].term_category_id.name"/>
+                                                        (<span t-field="unit_list[index].term_category_id.description"/>)
+                                                          <span t-field="unit_list[index].percentage"/>%
+                                                    </t>
+                                                </td>
+                                                <td style="width: 50%; font-size: 11px; padding: 3px;">
+                                                    <t t-if="index &lt; len(inst_list)">
+                                                        <span t-field="inst_list[index].term_category_id.name"/>
+                                                        (<span t-field="inst_list[index].term_category_id.description"/>)
+                                                          <span t-field="inst_list[index].percentage"/>%
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- ========================== HALAMAN KEDUA - JADWAL PELAKSANAAN ========================== -->
+                            <div class="oe_structure">
+                                <span style="font-size: 12px;"><b>3. Jadwal Pelaksanaan</b></span>
+
+                                <table class="o_has_total_table table o_main_table table-borderless">
+                                    <tbody t-foreach="property.quotation_schedule_term_ids" t-as="schedule">
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Produksi: <t>±</t> <span t-field="schedule.term_production"/> bulan setelah SPK (PO) &#38; DP di terima, dan setelah gambar kerja &#38; data teknis disetujui.</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Pengiriman: <t>±</t> <span t-field="schedule.term_delivery"/> bulan (jalur hijau pabean).</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Instalasi &#38; T/C: <t>±</t> <span t-field="schedule.term_delivery"/> bulan.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- ========================== HALAMAN KEDUA - GARANSI/ PEMELIHARAAN ========================== -->
+                            <div class="oe_structure">
+                                <span style="font-size: 12px;"><b>4. Garansi/ Pemeliharaan</b></span>
+
+                                <table class="o_has_total_table table o_main_table table-borderless">
+                                    <tbody t-foreach="property.quotation_warranty_term_ids" t-as="warranty">
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Garansi unit selama <span t-field="warranty.term_unitwarranty_bast"/> bulan sejak T/C atau <span t-field="warranty.term_unitwarranty_shipment"/> bulan sejak unit dikirimkan dari pabrik; mana yang tercapat terlebih dahulu.</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Pemeliharaan cuma-cuma untuk unit selama <span t-field="warranty.term_free_maintenance"/> bulan, sejak unit terpasang.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- ========================== HALAMAN KEDUA - MASA BERLAKU ========================== -->
+                            <div class="oe_structure">
+                                <span style="font-size: 12px;"><b>5. Masa Berlaku</b></span>
+                                <table class="o_has_total_table table o_main_table table-borderless">
+                                    <tbody t-foreach="property.quotation_validity_term_ids" t-as="valid">
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Penawaran ini berlaku <span t-field="valid.term_validityperiod"/> bulan sejak tanggal penawaran ini.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- ========================== HALAMAN KEDUA - PEKERJAAN YANG TIDAK TERMASUK ========================== -->
+                            <div class="oe_structure">
+                                <span style="font-size: 12px;"><b>6. Pekerjaan yang Tidak Termasuk</b></span>
+                                <table class="o_has_total_table table o_main_table table-borderless">
+                                    <tr>
+                                        <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                        <td style="width: 98%; font-size: 11px; padding: 3px;">Pengadaan &#38; pemasangan sub panel elevator/ eskalator/ parking system, Air conditioning (AC), penerangan dan perlengkapan lainnya di ruang mesin.</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                        <td style="width: 98%; font-size: 11px; padding: 3px;">Eskalator: Cladding (penutup bagian samping &#38; bawah), Start-stop/ slow sensors (econo-drive).</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                        <td style="width: 98%; font-size: 11px; padding: 3px;">Penarikan kabel dari panel induk ke sub panel elevator/ eskalator, penarikan kabel intercom ke ruang monitor.</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                        <td style="width: 98%; font-size: 11px; padding: 3px;">Pengadaan daya listrik untuk Testing &#38; Commissioning (T/C).</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                        <td style="width: 98%; font-size: 11px; padding: 3px;">Pekerjaan sipil yang berhubungan dengan pekerjaan elevator/ eskalator/ parking system, seperti : pembuatan shaft/hoistway, ruang mesin, pit yang kedap air, separator/ intermediate beam, hoisting hook, balok praktis untuk dudukan rel bracket, bobokan dan perapihan lantai kembali, struktur opening, finishing sekitar jamb dan transom, support beam, kolom praktis untuk dudukan elevator/ eskalator/ parking system.</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!-- ========================== HALAMAN KEDUA - LAMPIRAN ========================== -->
+                            <div class="oe_structure">
+                                <span style="font-size: 12px;"><b>7. Lampiran</b></span>
+                                <table class="o_has_total_table table o_main_table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Spesifikasi Teknis.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- ========================== HALAMAN KEDUA - PENUTUP ========================== -->
+                            <div class="oe_structure">
+                                <span style="font-size: 11px; text-align: justify; display: block;">Demikian penawaran ini kami sampaikan, besar harapan kami untuk dapat turut berpartisipasi dalam proyek Bapak/Ibu. Jika ada pertanyaan lebih lanjut, mohon menghubungi kami.</span>
+                                <br/>
+                                <p style="font-size: 11px;">Atas perhatiannya kami ucapkan banyak terima kasih.</p>
+                                <br/>
+                                <p style="font-size: 11px;"><b>Hormat kami,</b></p>
+                                <p style="font-size: 11px;"><span t-field="company.name"/></p>
+                                <br/>
+                                <p style="font-size: 11px;">TTD</p>
+                                <br/>
+                                <p style="font-size: 11px;"><span t-field="company.director_id.name"/></p>
+                                <p style="font-size: 11px;">Direktur</p>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <!-- ========================== TEMPLATE QUOTATION REPORT without alt unit ========================== -->
+        <template id="report_sales_quot_woalt">
+            <t t-foreach="docs" t-as="property">
+                <t t-set="company" t-value="env['res.company']._company_default_get('uola.base.sale.quotation')"/>
+                <t t-call="web.html_container">
+                    <t t-call="uola_sale_quotation.custom_web_external_layout">
+                        <div class="page">
+                            <!-- ========================== HALAMAN PERTAMA ========================== -->
+                            <h6 style="border-bottom: 0px solid lightgray; text-align: center; padding-top:1px">Surat Penawaran Harga</h6>
+                            <table class="o_has_total_table table o_main_table table-borderless">
+                                <tr>
+                                    <td style="width: 10%; font-size: 10px; padding: 3px;">Tanggal</td>
+                                    <td style="width: 90%; font-size: 11px; padding: 3px;"><span t-field="property.base_quotation_date" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">No</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.number" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Ref</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.visnumber" /></td>
+                                </tr>
+                                <br/>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Kepada Yth.</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.partner_id.name" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Alamat</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.partner_id.street" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;"></td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.partner_id.street2"/>, <span t-field="property.partner_id.city_id.name" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Telpon</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.partner_id.phone" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Email</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.partner_id.email" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Hal</td>
+                                    <td style="font-size: 11px; padding: 3px;">Penawaran Harga Elevator/Eskalator/Parking System merek <span t-field="property.brand_id"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-size: 10px; padding: 3px;">Proyek</td>
+                                    <td style="font-size: 11px; padding: 3px;"><span t-field="property.project_id.name" />, <span t-field="property.quo_city_id.name"/></td>
+                                </tr>
+                            </table>
+                            <span style="font-size: 11px;">Dengan Hormat,</span>
+                            <span style="font-size: 11px; text-align: justify; display: block;">Pertama-tama kami ucapkan banyak terima kasih atas kesempatan yang telah Bapak/Ibu berikan kepada kami. Bersama ini kami sampaikan pengadaan dan instalasi elevator/eskalator/parking system merek <strong><span t-field="property.brand_id"/></strong> sebagai berikut:</span>
+                            <br/>
+                            <!-- ========================== BAGIAN HARGA UNIT ========================== -->
+                            <span style="font-size: 12px;"><b>1. Harga Unit</b></span>
+                            <div class="oe_structure" style="border-top: 1px solid #1768bd;">
+                                <table class="o_has_total_table table o_main_table table-borderless" width="100%">
+                                    <thead style="border-top: 1px solid #1768bd; border-bottom: 1px solid #1768bd;">
+                                        <tr style="border-top: 1px solid #1768bd;">
+                                            <th rowspan="3" style="width: 3%; font-size: 12px; color: #1768bd; text-align: center; height: 15px"><strong>No.</strong></th>
+                                            <th rowspan="3" colspan="2" style="width: 32%; font-size: 12px; color: #1768bd; text-align: center; height: 15px"><strong>Keterangan</strong></th>
+                                            <th rowspan="3" style="width: 5%; font-size: 12px; color: #1768bd; text-align: center; height: 15px"><strong>Qty</strong></th>
+                                            <th colspan="2" style="width: 30%; font-size: 12px; color: #1768bd; text-align: center; height: 15px"><strong>Harga Satuan*)</strong></th>
+                                            <th colspan="2" style="width: 30%; font-size: 12px; color: #1768bd; background-color: #d5eaff; text-align: center; height: 15px"><strong>Jumlah*)</strong></th>
+                                        </tr>
+                                        <tr style="border-top: 1px solid #1768bd;">
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; text-align: center; height: 15px"><strong>IDR</strong></th>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; text-align: center; height: 15px"><strong>IDR</strong></th>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center; height: 15px"><strong>IDR</strong></th>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center; height: 15px"><strong>IDR</strong></th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; text-align: center; height: 15px"><strong>(unit)</strong></th>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; text-align: center; height: 15px"><strong>(instalasi)</strong></th>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center; height: 15px"><strong>(unit)</strong></th>
+                                            <th style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center; height: 15px"><strong>(instalasi)</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="border-top: 1px solid #d5eaff;">
+                                        <t t-set="index" t-value="1"/>
+                                        <tr t-foreach="property.quotation_main_unit_ids" t-as="line">
+                                            <td style="width: 3%; font-size: 11px; color: #1768bd; text-align: center;"><t t-esc="index"/></td>
+                                            <t t-set="index" t-value="index + 1"/>
+                                            <td style="width: 26%; font-size: 11px; color: #1768bd; text-align: left;"><span t-field="line.buql_desc" /></td>
+                                            <td style="width: 6%; font-size: 11px; color: #1768bd; text-align: center;"><span t-field="line.buql_unitcode" /></td>
+                                            <td style="width: 5%; font-size: 11px; color: #1768bd; text-align: center;"><span t-field="line.buql_qty" /></td>
+                                            <td style="width: 15%; font-size: 11px; color: #1768bd; text-align: right;"><span t-field="line.buql_unitprice" /></td>
+                                            <td style="width: 15%; font-size: 11px; color: #1768bd; text-align: right;"><span t-field="line.buql_installation_price" /></td>
+                                            <td style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><span t-field="line.buql_subtotal_unitprice" /></td>
+                                            <td style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><span t-field="line.buql_subtotal_instalprice" /></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <t t-if="property.quotation_optional_item_ids">
+                                    <table class="o_has_total_table table o_main_table table-borderless" style="position: relative; top: -30px;" width="100%">
+                                        <thead style="border: none;">
+                                            <tr style="border: none;">
+                                                <th colspan="6" style="border: none; width: 70%; font-size: 9px; color: #1768bd; text-align: left;"></th>
+                                                <th colspan="2" style="border: none; width: 30%; font-size: 9px; color: #1768bd; background-color: #d5eaff; text-align: center;"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody style="border: none;">
+                                            <tr style="border: none;">
+                                                <th colspan="6" style="border: none; width: 70%; font-size: 9px; color: #1768bd; text-align: left;"><u>Optional:</u></th>
+                                                <th colspan="2" style="border: none; width: 30%; font-size: 9px; color: #1768bd; background-color: #d5eaff; text-align: center;"></th>
+                                            </tr>
+                                        </tbody>
+                                        <tbody style="border: none;">
+                                            <t t-set="oi_index" t-value="1"/>
+                                            <tr t-foreach="property.quotation_optional_item_ids" t-as="opt_item">
+                                                <td style="width: 3%; font-size: 11px; color: #1768bd; text-align: center;"><t t-esc="oi_index"/></td>
+                                                <t t-set="oi_index" t-value="oi_index + 1"/>
+                                                <td colspan="2" style="width: 32%; font-size: 11px; color: #1768bd; text-align: left;"><span t-field="opt_item.optional_item_list_id"/></td>
+                                                <td style="width: 5%; font-size: 11px; color: #1768bd; text-align: center;"><span t-field="opt_item.oi_qty"/></td>
+                                                <td style="width: 15%; font-size: 11px; color: #1768bd; text-align: right;"><span t-field="opt_item.oi_price_unit"/></td>
+                                                <td style="width: 15%; font-size: 11px; color: #1768bd; text-align: right;"><span t-field="opt_item.oi_price_inst"/></td>
+                                                <td style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right;"><span t-field="opt_item.oi_subtotal_price_unit"/></td>
+                                                <td style="width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right;"><span t-field="opt_item.oi_subtotal_price_inst"/></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </t>
+                                <table class="o_has_total_table table o_main_table table-borderless" style="position: relative; top: -30px;" width="100%">
+                                    <tbody style="border: none;" t-foreach="docs" t-as="property">
+                                        <tr>
+                                            <th colspan="6" style="border: none; width: 70%; font-size: 11px; color: #1768bd; text-align: right;"></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center;"> </th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center;"> </th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="6" style="border: none; width: 70%; font-size: 11px; color: #1768bd; text-align: right;"></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center;"> </th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: center;"> </th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="6" style="border: none; width: 70%; font-size: 11px; color: #1768bd; text-align: right;"><strong>Sub Total:</strong></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><strong><span t-field="property.subtotal_price_unit_main"/></strong></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><strong><span t-field="property.subtotal_price_inst_main"/></strong></th>
+                                        </tr>
+                                        <tr>
+                                            <th colspan="6" style="border: none; width: 70%; font-size: 11px; color: #1768bd; text-align: right;">PPN 11%:</th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><strong><span t-field="property.uola_quo_tax_unit"/></strong></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><strong><span t-field="property.uola_quo_tax_inst"/></strong></th>
+                                        </tr>
+                                        <tr style="border-top: 1px solid #1768bd; border-bottom: 1px solid #1768bd;">
+                                            <th colspan="2" style="border: none; width: 29%; font-size: 11px; color: #1768bd; text-align: left;">Referensi kurs: <span t-field="property.lock_rate_usd" /> IDR/USD</th>
+                                            <th style="border: none; width: 6%; font-size: 10px; color: #1768bd; text-align: right;">Total: </th>
+                                            <th style="border: none; width: 5%; font-size: 11px; color: #1768bd; text-align: center;"><span t-field="property.total_qty_main"/></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; text-align: left;"> Unit</th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; text-align: right;"><strong>Total Harga:</strong></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><strong><span t-field="property.uola_quo_total_unit"/></strong></th>
+                                            <th style="border: none; width: 15%; font-size: 11px; color: #1768bd; background-color: #d5eaff; text-align: right; padding: 3px;"><strong><span t-field="property.uola_quo_total_inst"/></strong></th>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p style="font-size: 10px; position: relative; top: -40px;">*)<i>loco  </i><strong><span t-field="property.quo_city_id.name"/>, <span t-field="property.quo_city_id.state_id"/></strong></p>
+                            <p style="font-size: 10px; position: relative; top: -50px;"><u>Note:</u></p>
+                            <p style="text-align: right; font-size: 10px; position: relative; top: 0px;"><i>Cara Pembayaran...</i></p>
+
+                            <!-- ========================== HALAMAN KEDUA - CARA PEMBAYARAN ========================== -->
+                            <div class="oe_structure" style="page-break-before: always;">
+                                <span style="font-size: 12px;"><b>2. Cara Pembayaran</b></span>
+
+                                <table style="border-bottom: 1px solid lightgray;" class="o_has_total_table table o_main_table table-borderless">
+                                    <thead style="border-bottom: 1px solid lightgray;">
+                                        <tr>
+                                            <th style="width: 50%; font-size: 11px; color: black; text-align: left;"><strong>Unit</strong></th>
+                                            <th style="width: 50%; font-size: 11px; color: black; text-align: left;"><strong>Instalasi</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-set="max_length" t-value="max(len(property.quotation_payment_unit_ids), len(property.quotation_payment_inst_ids))"/>
+                                        <t t-set="unit_list" t-value="property.quotation_payment_unit_ids or []"/>
+                                        <t t-set="inst_list" t-value="property.quotation_payment_inst_ids or []"/>
+                                        <t t-foreach="range(max_length)" t-as="index">
+                                            <tr style="font-size: 11px;">
+                                                <td style="width: 50%; font-size: 11px; padding: 3px;">
+                                                    <t t-if="index &lt; len(unit_list)">
+                                                        <span t-field="unit_list[index].term_category_id.name"/>
+                                                        (<span t-field="unit_list[index].term_category_id.description"/>)
+                                                          <span t-field="unit_list[index].percentage"/>%
+                                                    </t>
+                                                </td>
+                                                <td style="width: 50%; font-size: 11px; padding: 3px;">
+                                                    <t t-if="index &lt; len(inst_list)">
+                                                        <span t-field="inst_list[index].term_category_id.name"/>
+                                                        (<span t-field="inst_list[index].term_category_id.description"/>)
+                                                          <span t-field="inst_list[index].percentage"/>%
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- ========================== HALAMAN KEDUA - JADWAL PELAKSANAAN ========================== -->
+                            <div class="oe_structure">
+                                <span style="font-size: 12px;"><b>3. Jadwal Pelaksanaan</b></span>
+
+                                <table class="o_has_total_table table o_main_table table-borderless">
+                                    <tbody t-foreach="property.quotation_schedule_term_ids" t-as="schedule">
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Produksi: <t>±</t> <span t-field="schedule.term_production"/> bulan setelah SPK (PO) &#38; DP di terima, dan setelah gambar kerja &#38; data teknis disetujui.</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Pengiriman: <t>±</t> <span t-field="schedule.term_delivery"/> bulan (jalur hijau pabean).</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Instalasi &#38; T/C: <t>±</t> <span t-field="schedule.term_delivery"/> bulan.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- ========================== HALAMAN KEDUA - GARANSI/ PEMELIHARAAN ========================== -->
+                            <div class="oe_structure">
+                                <span style="font-size: 12px;"><b>4. Garansi/ Pemeliharaan</b></span>
+
+                                <table class="o_has_total_table table o_main_table table-borderless">
+                                    <tbody t-foreach="property.quotation_warranty_term_ids" t-as="warranty">
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Garansi unit selama <span t-field="warranty.term_unitwarranty_bast"/> bulan sejak T/C atau <span t-field="warranty.term_unitwarranty_shipment"/> bulan sejak unit dikirimkan dari pabrik; mana yang tercapat terlebih dahulu.</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Pemeliharaan cuma-cuma untuk unit selama <span t-field="warranty.term_free_maintenance"/> bulan, sejak unit terpasang.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- ========================== HALAMAN KEDUA - MASA BERLAKU ========================== -->
+                            <div class="oe_structure">
+                                <span style="font-size: 12px;"><b>5. Masa Berlaku</b></span>
+                                <table class="o_has_total_table table o_main_table table-borderless">
+                                    <tbody t-foreach="property.quotation_validity_term_ids" t-as="valid">
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Penawaran ini berlaku <span t-field="valid.term_validityperiod"/> bulan sejak tanggal penawaran ini.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- ========================== HALAMAN KEDUA - PEKERJAAN YANG TIDAK TERMASUK ========================== -->
+                            <div class="oe_structure">
+                                <span style="font-size: 12px;"><b>6. Pekerjaan yang Tidak Termasuk</b></span>
+                                <table class="o_has_total_table table o_main_table table-borderless">
+                                    <tr>
+                                        <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                        <td style="width: 98%; font-size: 11px; padding: 3px;">Pengadaan &#38; pemasangan sub panel elevator/ eskalator/ parking system, Air conditioning (AC), penerangan dan perlengkapan lainnya di ruang mesin.</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                        <td style="width: 98%; font-size: 11px; padding: 3px;">Eskalator: Cladding (penutup bagian samping &#38; bawah), Start-stop/ slow sensors (econo-drive).</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                        <td style="width: 98%; font-size: 11px; padding: 3px;">Penarikan kabel dari panel induk ke sub panel elevator/ eskalator, penarikan kabel intercom ke ruang monitor.</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                        <td style="width: 98%; font-size: 11px; padding: 3px;">Pengadaan daya listrik untuk Testing &#38; Commissioning (T/C).</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                        <td style="width: 98%; font-size: 11px; padding: 3px;">Pekerjaan sipil yang berhubungan dengan pekerjaan elevator/ eskalator/ parking system, seperti : pembuatan shaft/hoistway, ruang mesin, pit yang kedap air, separator/ intermediate beam, hoisting hook, balok praktis untuk dudukan rel bracket, bobokan dan perapihan lantai kembali, struktur opening, finishing sekitar jamb dan transom, support beam, kolom praktis untuk dudukan elevator/ eskalator/ parking system.</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <!-- ========================== HALAMAN KEDUA - LAMPIRAN ========================== -->
+                            <div class="oe_structure">
+                                <span style="font-size: 12px;"><b>7. Lampiran</b></span>
+                                <table class="o_has_total_table table o_main_table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 2%; font-size: 10px; padding: 3px;">-</td>
+                                            <td style="width: 98%; font-size: 11px; padding: 3px;">Spesifikasi Teknis.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- ========================== HALAMAN KEDUA - PENUTUP ========================== -->
+                            <div class="oe_structure">
+                                <span style="font-size: 11px; text-align: justify; display: block;">Demikian penawaran ini kami sampaikan, besar harapan kami untuk dapat turut berpartisipasi dalam proyek Bapak/Ibu. Jika ada pertanyaan lebih lanjut, mohon menghubungi kami.</span>
+                                <br/>
+                                <p style="font-size: 11px;">Atas perhatiannya kami ucapkan banyak terima kasih.</p>
+                                <br/>
+                                <p style="font-size: 11px;"><b>Hormat kami,</b></p>
+                                <p style="font-size: 11px;"><span t-field="company.name"/></p>
+                                <br/>
+                                <p style="font-size: 11px;">TTD</p>
+                                <br/>
+                                <p style="font-size: 11px;"><span t-field="company.director_id.name"/></p>
+                                <p style="font-size: 11px;">Direktur</p>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <record id="report_sales_quot_v2" model="ir.actions.report">
+            <field name="name">Preview (With Alt Unit)</field>
+            <field name="model">uola.base.sale.quotation</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">uola_sale_quotation.report_sales_quot</field>
+            <field name="print_report_name">'Quotation-%s-%s-%s-%s-%s' % (object.project_id.ua_project_number, object.salesman_id.initial_user_id, object.project_id.name, object.quo_city_id.name, object.visnumber)</field>
+        </record>
+
+        <record id="report_sales_quot_woalt_v2" model="ir.actions.report">
+            <field name="name">Preview (Without Alt Unit)</field>
+            <field name="model">uola.base.sale.quotation</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">uola_sale_quotation.report_sales_quot_woalt</field>
+            <field name="print_report_name">'Quotation-%s-%s-%s-%s-%s' % (object.project_id.ua_project_number, object.salesman_id.initial_user_id, object.project_id.name, object.quo_city_id.name, object.visnumber)</field>
+        </record>
+
+        <!-- <record id="report_sales_quot_v2" model="ir.actions.report">
+            <field name="name">Preview (With Alt Unit)</field>
+            <field name="model">uola.base.sale.quotation</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">uola_sale_quotation.report_sales_quot</field>
+            <field name="print_report_name">'Quotation-%s-%s-%s-%s-%s' % (object.project_id.ua_project_number, object.salesman_id.initial_user_id, object.project_id.name, object.quo_city_id.name, object.visnumber)</field>
+            <field name="binding_model_id" ref="model_uola_base_sale_quotation"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record id="report_sales_quot_woalt_v2" model="ir.actions.report">
+            <field name="name">Preview (Without Alt Unit)</field>
+            <field name="model">uola.base.sale.quotation</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">uola_sale_quotation.report_sales_quot_woalt</field>
+            <field name="print_report_name">'Quotation-%s-%s-%s-%s-%s' % (object.project_id.ua_project_number, object.salesman_id.initial_user_id, object.project_id.name, object.quo_city_id.name, object.visnumber)</field>
+            <field name="binding_model_id" ref="model_uola_base_sale_quotation"/>
+            <field name="binding_type">report</field>
+        </record> -->
+
+        <!-- ========================== KONFIGURASI REPORT ACTION with alt unit ==========================
+        <record id="sales_quot" model="ir.actions.report">
+            <field name="name">Print standard</field>
+            <field name="model">uola.base.sale.quotation</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">uola_sale_quotation.report_sales_quot</field>
+            <field name="report_file">uola_sale_quotation.report_sales_quot</field>
+            <field name="print_report_name">'Quotation-%s-%s-%s-%s-%s' % (object.project_id.ua_project_number, object.salesman_id.initial_user_id, object.project_id.name, object.quo_city_id.name, object.visnumber)</field>
+            <field name="binding_model_id" ref="model_uola_base_sale_quotation" />
+            <field name="binding_type">report</field> -->
+            <!-- <field name="groups_id" eval="[(4, ref('group_sales')), (4, ref('group_sales_manager')), (4, ref('group_top_management'))]"/> -->
+        <!-- </record> -->
+
+        <!-- ========================== KONFIGURASI REPORT ACTION without alt unit ==========================
+        <record id="sales_quot_woalt" model="ir.actions.report">
+            <field name="name">Print without alt unit</field>
+            <field name="model">uola.base.sale.quotation</field>
+            <field name="report_type">qweb-html</field>
+            <field name="report_name">uola_sale_quotation.report_sales_quot_woalt</field>
+            <field name="print_report_name">'Quotation-%s-%s-%s-%s-%s' % (object.project_id.ua_project_number, object.salesman_id.initial_user_id, object.project_id.name, object.quo_city_id.name, object.visnumber)</field>
+            <field name="binding_model_id" ref="model_uola_base_sale_quotation" />
+            <field name="binding_type">report</field> -->
+            <!-- <field name="groups_id" eval="[(4, ref('group_sales')), (4, ref('group_sales_manager')), (4, ref('group_top_management'))]"/> -->
+        <!-- </record> -->
+    </data>
+</odoo>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List view -->
+    <record id="view_invoice_list" model="ir.ui.view">
+        <field name="name">uola.invoice.list</field>
+        <field name="model">uola.invoice</field>
+        <field name="arch" type="xml">
+            <list string="Invoice">
+                <field name="name"></field>
+                <field name="company_id"></field>
+                <field name="partner_id"></field>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view -->
+    <record id="view_invoice_form" model="ir.ui.view">
+        <field name="name">uola.invoice.form</field>
+        <field name="model">uola.invoice</field>
+        <field name="arch" type="xml">
+            <form string="Invoice">
+            <header>
+                <button name="action_done" type="object" string="Confirm"  class="oe_highlight"/>
+                <button name="action_cancel" type="object" string="Cancel" class="btn-danger"/>  
+            <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"></field>
+            </header>
+                <sheet>
+                    <group>
+                        <group string="Basic">
+                            <field name="quotation_id"></field>
+                            <field name="name" readonly="True"/>
+                            <field name="company_id"/>
+                            <field name="company_address" readonly="True" force_save="1"/>
+                            <field name="partner_id"/>
+                            <field name="uola_inv_po_number"/>
+                        </group>
+                        <group string="Med">
+                            <!-- <field name="inv_date" widget="date" class="oe_inline" style="color: gray;"/> -->
+                            <field name="display_date" string="Invoice Date" readonly="1"/>
+                            <field name="uola_inv_do_number"/>
+                            <field name="phone" readonly="1" force_save="1"/>
+                            <field name="invoice_payment_term_id"/>
+                            <field name="currency_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="content" string="Content">
+                            <field name="inv_content_ids"></field>
+                        </page>
+                    </notebook>
+                </sheet>
+            <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_invoice" model="ir.actions.act_window">
+        <field name="name">Invoice</field>
+        <field name="res_model">uola.invoice</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new invoice
+            </p>
+        </field>
+    </record>
+
+</odoo>

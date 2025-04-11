@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sales_quotation,access.sales.quotation,model_sales_quotation,base.group_user,1,1,1,1
+access_sales_quotation_main,access.sales.quotation.main,model_sales_quotation_main,base.group_user,1,1,1,1
+access_uola_invoice,access.uola.invoice,model_uola_invoice,base.group_user,1,1,1,1
+access_invoice_content,access.invoice.content,model_invoice_content,base.group_user,1,1,1,1

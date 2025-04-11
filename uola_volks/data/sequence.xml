@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data noupdate="1">
+        <record id="seq_invoice" model="ir.sequence">
+            <field name="name">Invoice</field>
+            <field name="code">uola.invoice</field>
+            <field name="prefix">INV-UOLAPRIMA-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>  
+    </data>
+
+    <data noupdate="1">
+        <record id="seq_sales" model="ir.sequence">
+            <field name="name">Sales Quotation</field>
+            <field name="code">sales.quotation</field>
+            <field name="prefix">UOLAPS-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>  
+    </data>
+    
+
+</odoo>

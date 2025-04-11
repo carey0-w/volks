@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- List view -->
+    <record id="sales_quotation_main_list" model="ir.ui.view">
+        <field name="name">sales.quotation.main.list</field>
+        <field name="model">sales.quotation.main</field>
+        <field name="arch" type="xml">
+            <list string="Sales Quotation Main" editable="bottom">
+                <field name="uola_sale_quo_ref" string="Referensi"/>
+                <field name="uola_sale_quantity" string="Quantity"/>
+                <field name="uola_sale_unit_price"/>
+                <field name="uola_sale_amount" readonly="1"/>
+                <field name="uola_sale_tax" readonly="1"></field>
+                <field name="uola_sale_total_amount" readonly="1"/>
+            </list>       
+        </field>
+    </record>
+
+    <record id="action_sales_quotation_main" model="ir.actions.act_window">
+        <field name="name">Sales Quotation Main</field>
+        <field name="res_model">sales.quotation.main</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new main quotation
+            </p>
+        </field>
+    </record>
+
+</odoo>
