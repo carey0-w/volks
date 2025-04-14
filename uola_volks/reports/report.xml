@@ -58,7 +58,7 @@
 
                                     <div class="say-section">
                                         <p><strong>Say:</strong> <span t-field="o.uola_inv_say"/></p>
-                                        <p style="float: center; text-align: center;"><strong>Sincerely</strong></p>
+                                        <p style="float: center; text-align: center; margin-right: -700px; position: relative; top: -29px;"><strong>Sincerely</strong></p>
                                     </div>
                                         
                                         <p><strong>Bank Account :</strong></p>
@@ -69,7 +69,7 @@
 
                                         <div class="note-section">
                                             <p>Note : Please pay the full amount of this invoice</p>
-                                            <p style="float: right; text-align: center;"><strong>Direktur</strong></p>
+                                            <p style="float: center; text-align: center; margin-right: -700px;"><strong>Direktur</strong></p>
                                         </div>
                                         
                                     </th>
@@ -103,7 +103,7 @@
                             <th style="text-align: right;"><strong><span t-field="o.uola_inv_freight"/></strong></th>
                         </tr>
                         <tr>
-                            <th style="text-align: left; padding-bottom: 15px;"><strong>Total Amount</strong></th>
+                            <th style="text-align: left; padding-bottom: 14px;"><strong>Total Amount</strong></th>
                             <th style="text-align: right;"><strong><span t-field="o.uola_inv_total"/></strong></th>
                         </tr>
                         </table>
